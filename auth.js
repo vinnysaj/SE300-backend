@@ -5,8 +5,8 @@ const login_logs = require(__dirname + "/models/login_logs.model.js").login_logs
 
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
-const GOOGLE_CLIENT_ID = "574813733099-2n1gp9odeb692018p8g41jakp3c3qk04.apps.googleusercontent.com";
-const GOOGLE_CLIENT_SECRET = "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";
+const GOOGLE_CLIENT_ID = process.env.google_oauth_key;
+const GOOGLE_CLIENT_SECRET = process.env.google_secret;
 
 passport.use(new GoogleStrategy({
     clientID:     GOOGLE_CLIENT_ID,

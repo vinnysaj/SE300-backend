@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
-const sequelize = new Sequelize('postgres://se300:se300@127.0.0.1:5432/se300database', {logging: false});
+const sequelize = new Sequelize(process.env.postgre_login, {logging: false});
 
 sequelize.authenticate().then(() => {
   }).catch((error) => {
