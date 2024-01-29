@@ -1,0 +1,49 @@
+html
+    head
+        title Boundless Flight Maintenance Login
+        style.
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #eeeeee;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .auth-container {
+                background-color: white;
+                padding: 40px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                width: 400px;
+            }
+            .auth-header {
+                font-size: 20px;
+                color: #333;
+                margin-bottom: 20px;
+                white-space: nowrap;
+            }
+            .auth-button {
+                display: block;
+                width: calc(100% - 30px);
+                padding: 10px 15px;
+                margin: 10px auto;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                text-decoration: none;
+                color: white;
+                background-color: #4a90e2;
+                text-align: center;
+            }
+            .auth-button.apple-btn {
+                background-color: #000;
+            }
+    body
+        .auth-container
+            .auth-header Sign in to Boundless Flight Maintenance
+            a(href="/auth/google" class="auth-button") Sign in with Google
+            a(href="/auth/apple" class="auth-button apple-btn") Sign in with Apple

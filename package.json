@@ -1,0 +1,18 @@
+{
+  "name": "oauth-staging",
+  "version": "0.0.1",
+  "description": "Boundless aircraft managment open authentication",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Christopher Allen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "nodemon": "^3.0.3",
+    "passport": "^0.7.0",
+    "passport-google-oauth2": "^0.2.0"
+  }
+}
