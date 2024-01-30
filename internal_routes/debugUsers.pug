@@ -33,23 +33,25 @@ html
                 border: 1px solid #ddd;
                 box-sizing: border-box;
             }
-            .form-field button {
+            .form-buttons {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+            .form-buttons button, .form-buttons input[type="submit"] {
                 padding: 10px 15px;
-                background-color: #4a90e2;
+                font-size: 1em;
+                background-color: #4a90e2; /* Blue color */
                 color: white;
                 border: none;
                 cursor: pointer;
-                margin-left: 5px;
+                flex: 1; /* Flex grow */
+                margin: 0 5px; /* Spacing between buttons */
+                box-sizing: border-box;
             }
-            .form-field input[type="checkbox"], .form-field input[type="submit"], .form-field button {
+            .form-field input[type="checkbox"], .form-field button {
                 flex-grow: 0;
                 flex-shrink: 0;
-            }
-            .form-field input[type="submit"] {
-                background-color: #4a90e2;
-                color: white;
-                border: none;
-                cursor: pointer;
             }
         script.
             function fetchUserData() {
@@ -86,5 +88,6 @@ html
                 .form-field
                     label(for="planes") Planes (JSON):
                     textarea(id="planes" name="planes") #{planes}
-                .form-field
+                .form-buttons
                     input(type="submit" value="Submit")
+                    button(type="button" onclick="location.href='/debug'") Back

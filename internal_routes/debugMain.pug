@@ -1,0 +1,64 @@
+doctype html
+html
+    head
+        title Boundless Internal Debug Menu
+        style.
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                height: 100vh;
+                margin: 0;
+                text-align: center;
+            }
+            .title {
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #333;
+            }
+            .table-container {
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: auto;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+            th {
+                background-color: #6aafe6; /* Lighter blue */
+                color: white;
+            }
+            .button {
+                display: inline-block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: white;
+                background-color: #4a90e2;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+    body
+        h1.title Boundless Internal Debug Menu
+        .table-container
+           p Internal Debugging Tools Directory
+            table
+                tr
+                    td User Debug
+                    td
+                        a.button(href="/debugUser") User Debug
+                tr
+                    td Aircraft Debug
+                    td
+                        a.button(href="/debugAircraft") Aircraft Debug
+

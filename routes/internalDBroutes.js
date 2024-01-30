@@ -1,7 +1,97 @@
 const Users = require(__dirname + "./../models/users.model.js").Users;
+const Planes = require(__dirname + "./../models/planes.model.js").Planes;
+const DebugAPI = require(__dirname + "./../lib/aircraftLookup.js");
 function startInternal(app2){
 
 //************************INTERNAL SERVER FOR LOCAL DB ACCESS**************************************/  
+
+
+
+app2.get('/debugNewAircraft', async(req,res) => {
+    res.render('debugNewAircraftForm');
+});
+
+app2.post('/debugNewAircraft', async(req,res) => {
+    DebugAPI.pullNewAircraft(req.body.tail_number, async (returns) => {
+        if(returns === null){
+            res.redirect('/debugNewAircraft?error=' + req.body.tail_number);
+        } else {
+            const reqPlane = await Planes.findOne({where:{ reg: req.body.tail_number }});
+            if(reqPlane === null){
+                //no plane in system lets make one.
+                Planes.create({
+                    reg: req.body.tail_number,
+                    active: returns.data.active,
+                    serial: returns.data.serial,
+                    icao: returns.data.hexIcao,
+                    regowner: returns.data.airlineName,
+                    model: returns.data.model,
+                    typeName: returns.data.typeName,
+                    hours: 0
+                });
+                res.redirect('/debugAircraft?tail_number=' + req.body.tail_number);
+            } else {
+                //TODO ADD FORCE OPTION TO OVERWRITE HERE
+                //plane in system, redirect back to /debugAicraft?aircraft=tail_number
+                res.redirect('/debugAircraft?tail_number=' + req.body.tail_number);
+            }
+        }
+    });
+    
+})
+
+app2.get('/debugAircraft', async(req,res) => {
+    if(req.query.tail_number == null){
+        res.render('debugAircraft');
+    } else {
+        const reqAircraft = await Planes.findOne({
+            where:{reg: req.query.tail_number}
+        }).then((data) => {
+            if(data === null){
+                res.redirect('/debugAircraft?error=' + req.query.tail_number);
+            } else {
+                res.render('debugAircraft', {tail_number: req.query.tail_number, plane_id: data.id, icao: data.icao, typeName: data.typeName, hours: data.hours, owner_id: data.owner_id, serial: data.serial, model: data.model, regOwner: data.regowner, plane_data: data.plane_data, active: data.active});
+            }
+        })
+    }
+})
+
+app2.post('/debugAircraft', async(req,res) => {
+    var isActive = false;
+    var hours = 0;
+    if(!(req.body.hours < 0 || req.body.hours == "" || req.body.hours == null)){
+        hours=req.body.hours;
+    }
+    if(req.body.active == 'on'){
+        isActive = true
+    }
+    try{
+    Planes.update({
+        tail_number: req.body.tail_number,
+        active: isActive,
+        serial: req.body.serial,
+        icao: req.body.icao,
+        model: req.body.model,
+        typeName: req.body.typeName,
+        regowner: req.body.regOwner,
+        hours: hours,
+        plane_data: req.body.plane_data,
+        owner_id: req.body.owner_id
+    }, {where: { id: req.body.id }}).then(() => {
+        res.redirect('/debugAircraft?tail_number=' + req.body.tail_number);
+    })
+   } catch (error) {
+     console.log(error);
+   } 
+});
+
+
+
+app2.get('/debug', async (req,res) => {
+    res.render('debugMain');
+});
+
+
 app2.post('/getUserByEmail', async (req,res) => {
 
     app2.set('view engine', 'pug');
