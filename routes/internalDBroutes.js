@@ -1,6 +1,7 @@
 const Users = require(__dirname + "./../models/users.model.js").Users;
 const Planes = require(__dirname + "./../models/planes.model.js").Planes;
 const DebugAPI = require(__dirname + "./../lib/aircraftLookup.js");
+const JSONbig = require('json-bigint');
 function startInternal(app2){
 
 //************************INTERNAL SERVER FOR LOCAL DB ACCESS**************************************/  
@@ -10,6 +11,34 @@ function startInternal(app2){
 app2.get('/debugNewAircraft', async(req,res) => {
     res.render('debugNewAircraftForm');
 });
+
+app2.get('/debugAllAircraft', async (req, res) => {
+    try {
+        const planes = await Planes.findAll();
+        const planePromises = planes.map(async (plane) => {
+            if (plane.owner_id != null) {
+                const numeric = JSONbig.parse(plane.owner_id.toString()).owner_id[0].toString();
+                plane.owner_id = JSONbig.parse(plane.owner_id.toString()).owner_id[0];
+                const user = await Users.findOne({ where: { user_id: numeric } });
+                if (user) {
+                    plane.owner_name = user.name;
+                }
+            }
+            return plane;
+        });
+
+        const modifiedPlanes = await Promise.all(planePromises);
+        res.render('debugAllAircraft', { airplanes: modifiedPlanes });
+    } catch (error) {
+        console.error("Error in /debugAllAircraft:", error);
+        res.status(500).send("An error occurred while processing your request.");
+    }
+});
+
+app2.get('/debugAllusers', async(req,res) => {
+    const allUsers = await Users.findAll({});
+    res.render('debugAllUsers', {users: allUsers});
+})
 
 app2.post('/debugNewAircraft', async(req,res) => {
     DebugAPI.pullNewAircraft(req.body.tail_number, async (returns) => {
@@ -166,7 +195,7 @@ app2.post('/noLongerNewUser', async(req,res) => {
 })
 
 app2.get('/debugUserNotFound', (req,res) => {
-    var user_id = req.param('userid');
+    var user_id = req.query.userid;
     res.render('debugUserNotFound', { user_id: user_id });
 })
 

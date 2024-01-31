@@ -133,6 +133,8 @@ html
                     textarea(id="owner_id" name="owner_id") #{owner_id}
                 .form-field
                     input(type="submit" value="Submit Changes")
-                    button(type="button" onclick="location.href='/debugNewAircraft'") New Aircraft
                     button(type="button" onclick="location.href='/debug'") Back
+                    button(type="button" onclick="location.href='/debugNewAircraft'") New Aircraft
+                .form-field
+                    button(type="button" onclick="location.href='/debugAllAircraft'") List All Aircraft
                 div#error-box.error-box
