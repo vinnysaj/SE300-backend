@@ -23,7 +23,6 @@ function startInternal(app2) {
                     // added this check to fix an issue where "" may appear in the database and makes our lives miserable
                     if(plane.owner_id.length > 4){
                         const numeric = JSONbig.parse(plane.owner_id.toString()).owner_id[0].toString();
-                        console.log("HERE")
                         plane.owner_id = JSONbig.parse(plane.owner_id.toString()).owner_id[0];
                         const user = await Users.findOne({
                             where: {
@@ -43,8 +42,7 @@ function startInternal(app2) {
                 airplanes: modifiedPlanes
             });
         } catch (error) {
-            console.log(error);
-            //console.error("Error in /debugAllAircraft:", error);
+            console.error("Error in /debugAllAircraft:", error);
             res.status(500).send("An error occurred while processing your request.");
         }
     });
@@ -148,7 +146,7 @@ function startInternal(app2) {
                 res.redirect('/debugAircraft?tail_number=' + req.body.tail_number);
             })
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     });
 
