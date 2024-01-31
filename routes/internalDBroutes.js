@@ -200,19 +200,25 @@ app2.get('/debugUserNotFound', (req,res) => {
 })
 
 app2.get('/debugUser', async(req,res) => {
-    var userid = null;
-    if(req.query.userid != null){
-        userid = req.query.userid;
+    if(req.query.userid){
+        var userid = null;
+        if(req.query.userid != null){
+            userid = req.query.userid;
+        } else {
+            var chrisID = '106128017282493053284';
+            userid = chrisID;
+        }
+        const reqUser = await Users.findOne({where: { user_id : userid }});
+        if(reqUser === null) {
+            res.redirect('/debugUserNotFound?userid=' + userid);
+        } else {
+            res.render('debugUsers', { user_id: userid, isNewUser: reqUser.is_new_user, name: reqUser.name, email: reqUser.email, phone_number: reqUser.phone_number, planes: reqUser.planes, isadmin: reqUser.admin});
+        }
     } else {
-        var chrisID = '106128017282493053284';
-        userid = chrisID;
+        res.render('debugUsers');
     }
-    const reqUser = await Users.findOne({where: { user_id : userid }});
-    if(reqUser === null) {
-        res.redirect('/debugUserNotFound?userid=' + userid);
-    } else {
-        res.render('debugUsers', { user_id: userid, isNewUser: reqUser.is_new_user, name: reqUser.name, email: reqUser.email, phone_number: reqUser.phone_number, planes: reqUser.planes, isadmin: reqUser.admin});
-    }
+    
+    
 })
 
 app2.post('/debugUserPostNewData', async(req,res) => {
