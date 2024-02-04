@@ -56,11 +56,11 @@ html
         script.
             function fetchUserData() {
                 var userid = document.getElementById('user_id').value;
-                location.href = '/debugUser?userid=' + userid;
+                location.href = '/debug/user?userid=' + userid;
             }
     body
         .form-container
-            form(action="/debugUserPostNewData" method="post")
+            form(action="/debug/userPostNewData" method="post")
                 .form-field
                     label(for="user_id") User ID:
                     input(type="text" id="user_id" name="user_id" value=user_id)
@@ -90,6 +90,6 @@ html
                     textarea(id="planes" name="planes") #{planes}
                 .form-buttons
                     input(type="submit" value="Submit")
-                    button(type="button" onclick="location.href='/debug'") Back
+                    button(type="button" onclick="location.href='/debug/'") Back
                 .form-buttons
-                    button(type="button" onclick="location.href='/debugAllUsers'") List All Users
+                    button(type="button" onclick="location.href='/debug/allUsers'") List All Users

@@ -91,11 +91,11 @@ html
     body
         h1.title Initialize New Aircraft
         .form-container
-            form(action="/debugNewAircraft" method="post")
+            form(action="/debug/newAircraft" method="post")
                 .form-field
                     label(for="tail_number") Aircraft Tail Number:
                     input(type="text" id="tail_number" name="tail_number" required)
                 .form-buttons
                     input(type="submit" value="Submit")
-                    button(type="button" onclick="location.href='/debugAircraft'") Back
+                    button(type="button" onclick="location.href='/debug/aircraft'") Back
         div#error-box.error-box
