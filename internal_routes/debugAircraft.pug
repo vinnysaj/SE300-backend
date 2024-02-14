@@ -96,7 +96,7 @@ html
                 span.close-btn(onclick="closeErrorBox()") ×
                 | #{error} was not found in our records, please create it.
         .form-container
-            form(action="/debug/aircraft" method="post")
+            form(action="/debug/aircraft/" method="post")
                 .form-field
                     label(for="tail_number") Tail:
                     input(type="text" id="tail_number" name="tail_number" value=tail_number required)

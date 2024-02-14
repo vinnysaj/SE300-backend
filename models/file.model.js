@@ -19,8 +19,8 @@ const file = sequelize.define("file", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    user_id_updlaoded: {
-        type: DataTypes.INTEGER,
+    user_id_uploaded: {
+        type: DataTypes.STRING,
         allowNull: false
     },
     timestamp: {
@@ -47,12 +47,26 @@ const file = sequelize.define("file", {
         type: DataTypes.JSON,
         allowNull: true
     },
+    full_location: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    file_name: {
+        type:DataTypes.STRING,
+        allowNull: false
+    },
     description: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    file_extension: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 
 });
+
+
 
 module.exports = {
     file: file

@@ -6,7 +6,7 @@ sequelize.authenticate().then(() => {
   console.error('Unable to connect to the database: ', error);
 });
 
-const Planes = sequelize.define("Planes", {
+const Planes = sequelize.define("planes", {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -52,10 +52,15 @@ const Planes = sequelize.define("Planes", {
     owner_id:{
         type: DataTypes.JSON,
         allowNull: true
+    },
+    icon_file_uid: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 
 
 });
+
 
 module.exports = {
     Planes : Planes

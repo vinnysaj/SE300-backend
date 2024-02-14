@@ -6,7 +6,7 @@ sequelize.authenticate().then(() => {
     console.error('Unable to connect to the database: ', error);
   });
 
-const Users = sequelize.define("Users", {
+const Users = sequelize.define("users", {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -47,6 +47,7 @@ const Users = sequelize.define("Users", {
     }
 
   })
+
 
 module.exports = {
     Users : Users

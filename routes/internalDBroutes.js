@@ -11,6 +11,48 @@ function startInternal(app2) {
 
 
     /**   BEGIN DEBUG */
+
+    
+    app2.get('/debug/userNotFound', (req, res) => {
+        var user_id = req.query.userid;
+        res.render('debugUserNotFound', {
+            user_id: user_id
+        });
+    })
+
+    app2.get('/debug/user', async (req, res) => {
+        if (req.query.userid) {
+            var userid = null;
+            if (req.query.userid != null) {
+                userid = req.query.userid;
+            } else {
+                var chrisID = '106128017282493053284';
+                userid = chrisID;
+            }
+            const reqUser = await Users.findOne({
+                where: {
+                    user_id: userid
+                }
+            });
+            if (reqUser === null) {
+                res.redirect('/debug/userNotFound?userid=' + userid);
+            } else {
+                res.render('debugUsers', {
+                    user_id: userid,
+                    isNewUser: reqUser.is_new_user,
+                    name: reqUser.name,
+                    email: reqUser.email,
+                    phone_number: reqUser.phone_number,
+                    planes: reqUser.planes,
+                    isadmin: reqUser.admin
+                });
+            }
+        } else {
+            res.render('debugUsers');
+        }
+    })
+
+
     app2.get('/debug/assignUserAircaft', async (req,res) => {
         res.sendStatus(404);
     });
@@ -190,217 +232,6 @@ function startInternal(app2) {
     });
 
     /* END DEBUG */
-
-
-    /* BEGIN USER */
-    app2.post('/user/get/byEmail', async (req, res) => {
-
-        app2.set('view engine', 'pug');
-        app2.set('views', './internal_routes');
-
-        const reqUser = await Users.findOne({
-            where: {
-                email: req.body.email
-            }
-        })
-        if (reqUser === null) {
-            res.send("NULL");
-        } else {
-            res.send(reqUser);
-        }
-    })
-
-    app2.post('/user/get/assignedAircraft', async (req, res) => {
-        const reqUser = await Users.findOne({
-            where: {
-                user_id: req.body.user_id
-            }
-        });
-        if (reqUser === null) {
-            res.send("NULL");
-        } else {
-            res.send(reqUser.planes);
-        }
-    })
-
-
-    app2.post('/user/get/byID', async (req, res) => {
-        const reqUser = await Users.findOne({
-            where: {
-                user_id: req.body.id
-            }
-        })
-        if (reqUser === null) {
-            res.send("NULL");
-        } else {
-            res.send(reqUser);
-        }
-    })
-
-    app2.post('/user/get/newUser', async (req, res) => {
-        const reqUser = await Users.findOne({
-            where: {
-                user_id: req.body.user_id
-            }
-        });
-        if (reqUser === null) {
-            res.send("NULL");
-        } else {
-            res.send(reqUser.is_new_user);
-        }
-    })
-
-    app2.post('/user/update/phoneNumber', async (req, res) => {
-        const reqUser = await Users.update({
-            phone_number: req.body.phone_number
-        }, {
-            where: {
-                user_id: req.body.user_id
-            }
-        });
-        res.send(reqUser);
-    })
-
-    
-
-    app2.post('/user/update/assignedAircraft', async (req, res) => {
-        const reqUser = await Users.update({
-            planes: req.body.planes
-        }, {
-            where: {
-                user_id: req.body.user_id
-            }
-        });
-        res.send(reqUser);
-    })
-
-    app2.post('/user/update/noLongerNewUser', async (req, res) => {
-        const reqUser = await Users.update({
-            is_new_user: false
-        }, {
-            where: {
-                user_id: req.body.user_id
-            }
-        });
-        res.send(reqUser);
-    })
-
-    app2.get('/debug/userNotFound', (req, res) => {
-        var user_id = req.query.userid;
-        res.render('debugUserNotFound', {
-            user_id: user_id
-        });
-    })
-
-    app2.get('/debug/user', async (req, res) => {
-        if (req.query.userid) {
-            var userid = null;
-            if (req.query.userid != null) {
-                userid = req.query.userid;
-            } else {
-                var chrisID = '106128017282493053284';
-                userid = chrisID;
-            }
-            const reqUser = await Users.findOne({
-                where: {
-                    user_id: userid
-                }
-            });
-            if (reqUser === null) {
-                res.redirect('/debug/userNotFound?userid=' + userid);
-            } else {
-                res.render('debugUsers', {
-                    user_id: userid,
-                    isNewUser: reqUser.is_new_user,
-                    name: reqUser.name,
-                    email: reqUser.email,
-                    phone_number: reqUser.phone_number,
-                    planes: reqUser.planes,
-                    isadmin: reqUser.admin
-                });
-            }
-        } else {
-            res.render('debugUsers');
-        }
-    })
-
-
-
-    app2.post('/user/get/assignedAircraftFormatted', async (req, res) => {
-        if (req.body.user_id != null) {
-            try {
-                const user = await Users.findOne({ where: { user_id: req.body.user_id } });
-                if (user) {
-                    const assignedPlanes = JSON.parse(user.planes).planes;
-                    let formattedList = [];
-    
-                    for (const planeid of assignedPlanes) {
-                        const plane = await Planes.findOne({ where: { reg: planeid } });
-                        if (plane) {
-                            formattedList.push(plane);
-                        }
-                    }
-    
-                    res.send(formattedList);
-                } else {
-                    res.status(404).send('User not found');
-                }
-            } catch (error) {
-                res.status(500).send('Server error');
-            }
-        } else {
-            res.sendStatus(400); 
-        }
-    });
-    
-
-
-    //AIRCRAFT
-    
-    app2.post('/aircraft/get/byTail', async(req,res) => {
-        Planes.findOne({where:{reg: req.body.tail}}).then((plane) => {
-            if(plane != null){
-                res.send(plane);
-            } else {
-                res.send(null);
-            }
-        });
-    });
-
-    app2.post('/aircraft/all', async(req,res) => {
-        Planes.findAll().then((planes) => {
-            res.send(planes);
-        });
-    });
-
-    app2.post('/aircraft/update/hours', async (req,res) => {
-        if(req.body.tail != null && req.body.hours != null){
-            try {
-                Planes.update({where: { reg:  req.body.tail}}, { hours: req.body.hours }).then((data) => {
-                    res.send(data)
-                })
-            } catch (error) {
-                res.status(500).send('Server Error');
-            }
-        } else {
-            res.sendStatus(400); 
-        }
-    });
-
-    //END AIRCRAFT
-
-
-
-    /* BEGIN FILE MANAGMENT*/
-    
-    app2.post('/file/get/all', async (req,res) => {
-        File.findAll().then((data) => {
-            res.send(data);
-        });
-    });
-    
-
-    /* END FILE MANAGMENT */
 
 }
 
