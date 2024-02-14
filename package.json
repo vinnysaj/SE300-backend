@@ -4,7 +4,8 @@
   "description": "Boundless aircraft managment open authentication",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "test": "echo 'OK!'"
   },
   "author": "Christopher Allen",
   "license": "ISC",
