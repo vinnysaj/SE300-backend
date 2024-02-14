@@ -1,39 +1,271 @@
-function isLoggedIn(req,res,next){
+const Users = require(__dirname + "./../models/users.model.js").Users;
+const Planes = require(__dirname + "./../models/planes.model.js").Planes;
+const File = require(__dirname + "./../models/file.model.js").File;
+const DebugAPI = require(__dirname + "./../lib/aircraftLookup.js");
+const JSONbig = require('json-bigint');
+const jwt = require('jsonwebtoken');
+
+
+function authenticateToken(req, res, next) {
+    token = null;
+    if(req.body.token){
+        token = req.body.token;
+    } else if (req.user.token){
+        token = req.user.token;
+    }
+
+    if (token == null) return res.sendStatus(401)
+  
+    jwt.verify(token, process.env.TOKEN_HASH, (err, user) => {
+  
+      if (err) return res.sendStatus(403)
+      
+      if(req.user){
+        req.user.token.tokeninfo = user;
+      } else if(req.body.token){
+        req.body.tokeninfo = user;
+      }
+  
+      next()
+    })
+  }
+
+function isLoggedIn(req, res, next) {
     // reject user if they do not have authentication
     req.user ? next() : res.sendStatus(401);
 }
 
-function startExternalRoutes(app,passport){
-// Temporary Solution Until hard route is in place @FIXME
-app.get('/', (req,res) => {
-    res.render('login');
-})
+function startExternalRoutes(app, passport) {
+    // Temporary Solution Until hard route is in place @FIXME
+    app.get('/', (req, res) => {
+        res.render('login');
+    })
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['email','profile']}));
+    app.get('/auth/google', passport.authenticate('google', {
+        scope: ['email', 'profile']
+    }));
 
-//protected route
-app.get('/app', isLoggedIn, (req,res) => {
-    res.render('userProfile', { profilephoto: req.user.picture, displayName: req.user.given_name, email: req.user.email, userid: req.user.id })
-})
+    //protected route
+    app.get('/app', isLoggedIn, authenticateToken, (req, res) => {
+        console.log(req.user);
+        res.render('userProfile', {
+            profilephoto: req.user.picture,
+            displayName: req.user.given_name,
+            email: req.user.email,
+            userid: req.user.id,
+            token: req.user.token
+        })
+    })
 
-app.get('/google/callback',
-passport.authenticate('google', {
-    successRedirect: '/app',
-    failureRedirect: '/auth/failure'
-}));
+    app.get('/google/callback', 
+        passport.authenticate('google', {
+            successRedirect: '/app',
+            failureRedirect: '/auth/failure'
+        }));
 
-app.get('/auth/failure',(req,res) => {
-    res.send("Authentication failure, please try again later.");
-})
+    app.get('/auth/failure', (req, res) => {
+        res.send("Authentication failure, please try again later.");
+    })
 
-app.get('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err) throw err;
+    app.get('/logout', (req, res) => {
+        req.logout((err) => {
+            if (err) throw err;
+        });
+        req.session.destroy();
+        res.redirect("/")
     });
-    req.session.destroy();
-    res.redirect("/")
-  });
+
+
+    /* BEGIN USER */
+    app.post('/api/user/get/byemail', authenticateToken, async (req, res) => {
+        app.set('view engine', 'pug');
+        app.set('views', './internal_routes');
+
+        const reqUser = await Users.findOne({
+            where: {
+                email: req.body.email
+            }
+        })
+        if (reqUser === null) {
+            res.send("NULL");
+        } else {
+            res.send(reqUser);
+        }
+    })
+
+    app.post('/api/user/get/assignedaircraft', authenticateToken, async (req, res) => {
+        const reqUser = await Users.findOne({
+            where: {
+                user_id: req.body.user_id
+            }
+        });
+        if (reqUser === null) {
+            res.send("NULL");
+        } else {
+            res.send(reqUser.planes);
+        }
+    })
+
+
+    app.post('/api/user/get/byid', authenticateToken, async (req, res) => {
+        const reqUser = await Users.findOne({
+            where: {
+                user_id: req.body.id
+            }
+        })
+        if (reqUser === null) {
+            res.send("NULL");
+        } else {
+            res.send(reqUser);
+        }
+    })
+
+    app.post('/api/user/get/newuser', authenticateToken, async (req, res) => {
+        const reqUser = await Users.findOne({
+            where: {
+                user_id: req.body.user_id
+            }
+        });
+        if (reqUser === null) {
+            res.send("NULL");
+        } else {
+            res.send(reqUser.is_new_user);
+        }
+    })
+
+    app.post('/api/user/update/phonenumber', authenticateToken, async (req, res) => {
+        const reqUser = await Users.update({
+            phone_number: req.body.phone_number
+        }, {
+            where: {
+                user_id: req.body.user_id
+            }
+        });
+        res.send(reqUser);
+    })
+
+
+
+    app.post('/api/user/update/assignedaircraft', authenticateToken, async (req, res) => {
+        const reqUser = await Users.update({
+            planes: req.body.planes
+        }, {
+            where: {
+                user_id: req.body.user_id
+            }
+        });
+        res.send(reqUser);
+    })
+
+    app.post('/api/user/update/noLongernewuser',authenticateToken, async (req, res) => {
+        const reqUser = await Users.update({
+            is_new_user: false
+        }, {
+            where: {
+                user_id: req.body.user_id
+            }
+        });
+        res.send(reqUser);
+    })
+
+    app.post('/api/user/get/assignedaircraftformatted', authenticateToken, async (req, res) => {
+        if (req.body.user_id != null) {
+            try {
+                const user = await Users.findOne({
+                    where: {
+                        user_id: req.body.user_id
+                    }
+                });
+                if (user) {
+                    const assignedPlanes = JSON.parse(user.planes).planes;
+                    let formattedList = [];
+
+                    for (const planeid of assignedPlanes) {
+                        const plane = await Planes.findOne({
+                            where: {
+                                reg: planeid
+                            }
+                        });
+                        if (plane) {
+                            formattedList.push(plane);
+                        }
+                    }
+
+                    res.send(formattedList);
+                } else {
+                    res.status(404).send('User not found');
+                }
+            } catch (error) {
+                res.status(500).send('Server error');
+            }
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+
+
+    //AIRCRAFT
+
+    app.post('/api/aircraft/get/bytail', authenticateToken, async (req, res) => {
+        Planes.findOne({
+            where: {
+                reg: req.body.tail
+            }
+        }).then((plane) => {
+            if (plane != null) {
+                res.send(plane);
+            } else {
+                res.send(null);
+            }
+        });
+    });
+
+    app.post('/api/aircraft/all', authenticateToken, async (req, res) => {
+        Planes.findAll().then((planes) => {
+            res.send(planes);
+        });
+    });
+
+    app.post('/api/aircraft/update/hours', authenticateToken, async (req, res) => {
+        if (req.body.tail != null && req.body.hours != null) {
+            try {
+                Planes.update({
+                    where: {
+                        reg: req.body.tail
+                    }
+                }, {
+                    hours: req.body.hours
+                }).then((data) => {
+                    res.send(data)
+                })
+            } catch (error) {
+                res.status(500).send('Server Error');
+            }
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    //END AIRCRAFT
+
+
+
+    /* BEGIN FILE MANAGMENT*/
+
+    app.post('/api/file/get/all', authenticateToken, async (req, res) => {
+        File.findAll().then((data) => {
+            res.send(data);
+        });
+    });
+
+
+    /* END FILE MANAGMENT */
+
+
 
 }
 
-module.exports = { startExternalRoutes : startExternalRoutes}
+module.exports = {
+    startExternalRoutes: startExternalRoutes
+}

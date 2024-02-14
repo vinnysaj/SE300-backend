@@ -60,15 +60,15 @@ html
                     each airplane in airplanes
                         tr
                             td
-                                a(href=`/debugAircraft?tail_number=${airplane.reg}`)= airplane.reg
+                                a(href=`/debug/aircraft?tail_number=${airplane.reg}`)= airplane.reg
                             td= airplane.model
                             td
                                 if airplane.owner_id
-                                    a(href=`/debugUser?userid=${airplane.owner_id}`) #{airplane.owner_name}
+                                    a(href=`/debug/user?userid=${airplane.owner_id}`) #{airplane.owner_name}
                                 else
                                     |
                             td= airplane.regowner
                             td= airplane.icao
                             td= airplane.hours
                 h5 Found #{airplanes.length} aircraft in system.
-            button.back-button(type="button" onclick="location.href='/debugAircraft'") Back
+            button.back-button(type="button" onclick="location.href='/debug/aircraft'") Back
