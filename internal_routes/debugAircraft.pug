@@ -88,7 +88,7 @@ html
             };
             function fetchAircraftData() {
                 var tail_number = document.getElementById('tail_number').value;
-                location.href = '/debugAircraft?tail_number=' + tail_number;
+                location.href = '/debug/aircraft?tail_number=' + tail_number;
             }
     body
         if error
@@ -96,7 +96,7 @@ html
                 span.close-btn(onclick="closeErrorBox()") ×
                 | #{error} was not found in our records, please create it.
         .form-container
-            form(action="/debugAircraft" method="post")
+            form(action="/debug/aircraft/" method="post")
                 .form-field
                     label(for="tail_number") Tail:
                     input(type="text" id="tail_number" name="tail_number" value=tail_number required)
@@ -133,8 +133,8 @@ html
                     textarea(id="owner_id" name="owner_id") #{owner_id}
                 .form-field
                     input(type="submit" value="Submit Changes")
-                    button(type="button" onclick="location.href='/debug'") Back
-                    button(type="button" onclick="location.href='/debugNewAircraft'") New Aircraft
+                    button(type="button" onclick="location.href='/debug/'") Back
+                    button(type="button" onclick="location.href='/debug/newAircraft'") New Aircraft
                 .form-field
-                    button(type="button" onclick="location.href='/debugAllAircraft'") List All Aircraft
+                    button(type="button" onclick="location.href='/debug/allAircraft'") List All Aircraft
                 div#error-box.error-box

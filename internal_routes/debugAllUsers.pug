@@ -58,7 +58,7 @@ html
                     each user in users
                         tr
                             td
-                                a(href=`/debugUser?userid=${user.user_id}`)= user.user_id
+                                a(href=`/debug/user?userid=${user.user_id}`)= user.user_id
                             td= user.name
                             td= user.email
-            button.back-button(type="button" onclick="location.href='/debugUser'") Back
+            button.back-button(type="button" onclick="location.href='/debug/user'") Back

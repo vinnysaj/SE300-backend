@@ -1,10 +1,11 @@
 const passport = require('passport');
 const Users = require(__dirname + "/models/users.model.js").Users;
 const login_logs = require(__dirname + "/models/login_logs.model.js").login_logs;
+const jwt = require('jsonwebtoken');
 
-
-
-
+function generateAccessToken(username) {
+  return jwt.sign(username, process.env.TOKEN_HASH, { expiresIn: '7 days' });
+}
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
 const GOOGLE_CLIENT_ID = process.env.google_oauth_key;
@@ -34,11 +35,12 @@ passport.use(new GoogleStrategy({
         is_new_user: true
       })
       userDidLogin(profile.id,request.headers['x-forwarded-for']);
+      profile.token = generateAccessToken( { username: profile.email} );
     } else {
       //current user
       //lets log this
       userDidLogin(profile.id,request.headers['x-forwarded-for']);
-      
+      profile.token = generateAccessToken( { username: profile.email } );
     }
 
     return done(null, profile);

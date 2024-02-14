@@ -1,68 +1,73 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = new Sequelize(process.env.postgre_login, {logging: false});
 
+
 sequelize.authenticate().then(() => {
 }).catch((error) => {
   console.error('Unable to connect to the database: ', error);
 });
 
-const Planes = sequelize.define("planes", {
+
+const file = sequelize.define("file", {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    reg:{
+    file_uid: { 
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
     },
-    active:{
-        type: DataTypes.BOOLEAN,
-        allowNull: true
-    },
-    serial:{
+    user_id_uploaded: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
-    icao:{
+    timestamp: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
-    model:{
+    type: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
-    typeName:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    regowner:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    hours:{
+    linked_aircraft_id: {
         type: DataTypes.INTEGER,
         allowNull: true
     },
-    plane_data:{
-        type: DataTypes.JSON,
-        allowNull: true
+    hand_written: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     },
-    owner_id:{
-        type: DataTypes.JSON,
-        allowNull: true
-    },
-    icon_file_uid: {
+    title: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    parsed_content: {
+        type: DataTypes.JSON,
+        allowNull: true
+    },
+    full_location: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    file_name: {
+        type:DataTypes.STRING,
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    file_extension: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
-
 
 });
 
 
-module.exports = {
-    Planes : Planes
-}
 
+module.exports = {
+    file: file
+}
