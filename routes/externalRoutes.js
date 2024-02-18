@@ -4,6 +4,7 @@ const File = require(__dirname + "./../models/file.model.js").File;
 const DebugAPI = require(__dirname + "./../lib/aircraftLookup.js");
 const JSONbig = require('json-bigint');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 
 function authenticateToken(req, res, next) {
@@ -93,20 +94,6 @@ function startExternalRoutes(app, passport) {
         }
     })
 
-    app.post('/api/user/get/assignedaircraft', authenticateToken, async (req, res) => {
-        const reqUser = await Users.findOne({
-            where: {
-                user_id: req.body.user_id
-            }
-        });
-        if (reqUser === null) {
-            res.send("NULL");
-        } else {
-            res.send(reqUser.planes);
-        }
-    })
-
-
     app.post('/api/user/get/byid', authenticateToken, async (req, res) => {
         const reqUser = await Users.findOne({
             where: {
@@ -120,7 +107,8 @@ function startExternalRoutes(app, passport) {
         }
     })
 
-    app.post('/api/user/get/newuser', authenticateToken, async (req, res) => {
+    //ASSIGNED AIRCRAFT
+    app.post('/api/user/get/assignedaircraft', authenticateToken, async (req, res) => {
         const reqUser = await Users.findOne({
             where: {
                 user_id: req.body.user_id
@@ -129,22 +117,9 @@ function startExternalRoutes(app, passport) {
         if (reqUser === null) {
             res.send("NULL");
         } else {
-            res.send(reqUser.is_new_user);
+            res.send(reqUser.planes);
         }
     })
-
-    app.post('/api/user/update/phonenumber', authenticateToken, async (req, res) => {
-        const reqUser = await Users.update({
-            phone_number: req.body.phone_number
-        }, {
-            where: {
-                user_id: req.body.user_id
-            }
-        });
-        res.send(reqUser);
-    })
-
-
 
     app.post('/api/user/update/assignedaircraft', authenticateToken, async (req, res) => {
         const reqUser = await Users.update({
@@ -157,9 +132,9 @@ function startExternalRoutes(app, passport) {
         res.send(reqUser);
     })
 
-    app.post('/api/user/update/noLongernewuser',authenticateToken, async (req, res) => {
+    app.post('/api/user/delete/assignedaircraft', authenticateToken, async (req, res) => {
         const reqUser = await Users.update({
-            is_new_user: false
+            planes: null
         }, {
             where: {
                 user_id: req.body.user_id
@@ -168,6 +143,7 @@ function startExternalRoutes(app, passport) {
         res.send(reqUser);
     })
 
+    
     app.post('/api/user/get/assignedaircraftformatted', authenticateToken, async (req, res) => {
         if (req.body.user_id != null) {
             try {
@@ -203,6 +179,44 @@ function startExternalRoutes(app, passport) {
         }
     });
 
+    //END ASSIGNED AIRCRAFT
+
+    //NEW USER
+    app.post('/api/user/get/newuser', authenticateToken, async (req, res) => {
+        const reqUser = await Users.findOne({
+            where: {
+                user_id: req.body.user_id
+            }
+        });
+        if (reqUser === null) {
+            res.send("NULL");
+        } else {
+            res.send(reqUser.is_new_user);
+        }
+    })
+
+    app.post('/api/user/update/newuser',authenticateToken, async (req, res) => {
+        const reqUser = await Users.update({
+            is_new_user: false
+        }, {
+            where: {
+                user_id: req.body.user_id
+            }
+        });
+        res.send(reqUser);
+    })
+    // END NEW USER
+
+    app.post('/api/user/update/phonenumber', authenticateToken, async (req, res) => {
+        const reqUser = await Users.update({
+            phone_number: req.body.phone_number
+        }, {
+            where: {
+                user_id: req.body.user_id
+            }
+        });
+        res.send(reqUser);
+    })
 
 
     //AIRCRAFT
@@ -247,6 +261,8 @@ function startExternalRoutes(app, passport) {
         }
     });
 
+    
+
     //END AIRCRAFT
 
 
@@ -258,6 +274,22 @@ function startExternalRoutes(app, passport) {
             res.send(data);
         });
     });
+
+    app.post('/api/file/delete/uid', authenticateToken, async (req,res) => {
+        if(req.body.uid){
+            File.findOne({ where: { uid: req.body.uid }}).then((data) => {
+                if(data){
+                    fs.unlinkSync(data.full_location).then((data) => {
+                        res.sendStatus(200);
+                    })
+                } else {
+                    res.sendStatus(404);
+                }
+            })
+        }
+    });
+
+    
 
 
     /* END FILE MANAGMENT */
