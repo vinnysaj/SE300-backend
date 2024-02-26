@@ -5,6 +5,7 @@ const DebugAPI = require(__dirname + "./../lib/aircraftLookup.js");
 const JSONbig = require('json-bigint');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const ocr = require('../PyOCR/requestOcrFunctions')
 
 
 function authenticateToken(req, res, next) {
@@ -293,6 +294,31 @@ function startExternalRoutes(app, passport) {
 
 
     /* END FILE MANAGMENT */
+
+    /* BEGIN B64 POST */
+
+    
+    app.post('/api/ocr', authenticateToken, async (req, res) => {
+        if (req.body.b64 != null && req.body.handwritten == true) {
+            try {
+                let text = ocr.getFromOcrEndpointCompgen(req.body.b64);
+                res.send(text);
+
+            } catch (error) {
+                res.status(500).send('Server Error');
+            }
+        } else if(req.body.b64 != null && req.body.handwritten == false) {
+            try {
+                let text = ocr.getFromOcrEndpointHandwritten(req.body.b64);
+                res.send(text);
+            } catch (error) {
+                res.status(500).send('Server Error');
+            }
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
 
 
 
