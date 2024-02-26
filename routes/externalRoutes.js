@@ -295,9 +295,9 @@ function startExternalRoutes(app, passport) {
 
     /* END FILE MANAGMENT */
 
+
     /* BEGIN B64 POST */
 
-    
     app.post('/api/ocr', authenticateToken, async (req, res) => {
         if (req.body.b64 != null && req.body.handwritten == true) {
             try {
@@ -319,6 +319,7 @@ function startExternalRoutes(app, passport) {
         }
     });
 
+    /* END B64 POST */
 
 
 

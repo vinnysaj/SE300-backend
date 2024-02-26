@@ -1,4 +1,4 @@
-export default async function getFromOcrEndpointCompgen(b64String) {
+async function getFromOcrEndpointCompgen(b64String) {
     url = "127.0.0.1:5000/ocr/compgen/"
     const response = await fetch(url, {
         method: "POST", 
@@ -13,7 +13,7 @@ export default async function getFromOcrEndpointCompgen(b64String) {
       return response.json();
 }
 
-export default async function getFromOcrEndpointHandwritten(b64String) {
+async function getFromOcrEndpointHandwritten(b64String) {
     url = "127.0.0.1:5000/ocr/handwritten/"
     const response = await fetch(url, {
         method: "POST", 
@@ -28,3 +28,7 @@ export default async function getFromOcrEndpointHandwritten(b64String) {
       return response.json();
 }
 
+module.exports = {
+    getFromOcrEndpointCompgen: getFromOcrEndpointCompgen,
+    getFromOcrEndpointHandwritten: getFromOcrEndpointHandwritten
+}
