@@ -2,6 +2,7 @@ const passport = require('passport');
 const Users = require(__dirname + "/models/users.model.js").Users;
 const login_logs = require(__dirname + "/models/login_logs.model.js").login_logs;
 const jwt = require('jsonwebtoken');
+//var request = require('request').defaults({ encoding: null });
 
 function generateAccessToken(username) {
   return jwt.sign(username, process.env.TOKEN_HASH, { expiresIn: '7 days' });
@@ -16,7 +17,7 @@ passport.use(new GoogleStrategy({
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: "https://auth.boundlessflight.net/google/callback",
     passReqToCallback   : true,
-    cookie: { secure: true },
+    cookie: { secure: false },
     proxy: true
   },
   async function(request, accessToken, refreshToken, profile, done) {
@@ -32,15 +33,17 @@ passport.use(new GoogleStrategy({
         user_id: profile.id,
         email: profile.email,
         name: profile.given_name,
-        is_new_user: true
+        is_new_user: true,
+        profile_image: profile.picture
       })
       userDidLogin(profile.id,request.headers['x-forwarded-for']);
-      profile.token = generateAccessToken( { username: profile.email} );
+      profile.token = generateAccessToken( { username: profile} );
     } else {
       //current user
       //lets log this
       userDidLogin(profile.id,request.headers['x-forwarded-for']);
-      profile.token = generateAccessToken( { username: profile.email } );
+      profile.token = generateAccessToken( { username: profile } );
+      console.log(profile.token);
     }
 
     return done(null, profile);

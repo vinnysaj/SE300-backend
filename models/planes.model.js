@@ -50,15 +50,17 @@ const Planes = sequelize.define("planes", {
         allowNull: true
     },
     owner_id:{
-        type: DataTypes.JSON,
+        type: DataTypes.STRING,
         allowNull: true
     },
-    icon_file_uid: {
+    icon_file_b64: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    cover_file_b64: {
         type: DataTypes.STRING,
         allowNull: true
     }
-
-
 });
 
 

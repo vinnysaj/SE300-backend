@@ -29,6 +29,10 @@ const Users = sequelize.define("users", {
       type: DataTypes.STRING(50),
       allowNull: false
     },
+    nickname: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
     email: {
         type: DataTypes.STRING(50),
         allowNull: false
@@ -44,9 +48,17 @@ const Users = sequelize.define("users", {
     admin: {
       type: DataTypes.BOOLEAN,
       allowNull: true
+    },
+    profile_image: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    profile_image_b64: {
+      type: DataTypes.BLOB,
+      allowNull: true
     }
-
   })
+
 
 
 module.exports = {

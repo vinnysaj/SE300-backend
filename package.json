@@ -10,10 +10,18 @@
   "author": "Christopher Allen",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.7",
+    "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "fetch": "^1.1.0",
+    "json-bigint": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.0.3",
     "passport": "^0.7.0",
-    "passport-google-oauth2": "^0.2.0"
+    "passport-google-oauth2": "^0.2.0",
+    "pg": "^8.11.3",
+    "pug": "^3.0.2",
+    "sequelize": "^6.37.1"
   }
 }

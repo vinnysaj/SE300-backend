@@ -28,14 +28,15 @@ app.use(session({ secret: 'SE300!!', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.enable("trust proxy", true);
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app2.use(express.json());
 app2.set('view engine', 'pug');
 app2.set('views', './internal_routes');
-app2.use(express.urlencoded({ extended: true }));
+app2.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.set('view engine', 'pug');
 app.set('views', './login_routes');
 internalDBRoutes.startInternal(app2);
 externalRoutes.startExternalRoutes(app,passport);
 app.listen(8001, ()=>{ console.log("Oauth Running on Port 8001 for NGINX");})
+app.listen(8000, ()=>{ console.log("Oauth Running on Port 8000 for NGINX");})
 app2.listen(6969, ()=>{ console.log("Internal Query Server running on Port 6969");})
