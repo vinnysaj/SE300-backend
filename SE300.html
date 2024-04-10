@@ -1,0 +1,143 @@
+
+# Basically this is just the page for the ADSB api call in, the pyflaskhome python file has the directory with this file called in @____/SE300
+
+<head>
+    <title>ADSB</title>
+    <input id = "MySearch" onkeyup='searchTable()' type='text' placeholder="Find a plane by number class="searchbox>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <div class="PageText">
+        <h1>Se300</h1>
+        <h2>ADSB Here</h2>
+    </div>
+
+    <div class="LogoShape">
+        <img src="https://res.cloudinary.com/dhm3ad26h/image/upload/v1707455178/dsplmbnrnxgxkdz59rze.png">
+    </div>
+    <div class="content">
+        <table id= "Table1" class = "tablecss">
+        
+            <tr>
+                <th>flight</th>
+                <th>squawk</th>
+                <th>hex</th>
+                <th>alt_geom</th>
+                <th>alt_baro</th>
+                <th>gs</th>
+                <th>track</th>
+                <th>baro_rate</th>
+            </tr>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row['flight'] }}</td>
+                <td>{{ row['squawk'] }}</td>
+                <td>{{ row['hex'] }}</td>
+                <td>{{ row['alt_geom'] }}</td>
+                <td>{{ row['alt_baro'] }}</td>
+                <td>{{ row['gs'] }}</td>
+                <td>{{ row['track'] }}</td>
+                <td>{{ row['baro_rate'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <style>
+        body {
+            background-color: #FFFFFF;
+            margin : 0px;
+            color: black;
+            text-align: center;
+        }
+
+   
+        .LogoShape{
+            width:48px;
+            height:48px;
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            overflow: hidden;
+            position: center;
+            border: 4px;
+            margin: 10px;
+        }
+
+        .LogoShape img{
+            width:100%;
+            height: auto;
+            display: block;
+            border: 4px solid black;
+        }
+
+        .searchbox{
+            font-size:12px;
+            border: solid black 2px;
+            text-align: center;
+            float: right;
+            margin-right: 0px;
+            margin-top: -38px;
+            overflow: hidden;
+            padding: 10px;
+            display: block;
+        }
+        .tablecss{
+            margin: auto;
+            border: solid black 0px;
+            color: #0026FF;
+        }
+        .tablecss th{
+            border-bottom: solid grey 2px;
+            padding: 10px;
+            text-align: center;
+        }
+        .tablecss td{
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .PageText{
+            text-align: center;
+        }
+    </style>
+
+    <script>
+
+        function searchTable(event){
+            if (event.key === "Enter"){
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("MySearch");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("Table1");
+                tr = table.getElementsByTagName("tr");
+
+                
+                for (i = 1; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        }
+        var input1 = document.getElementById("MySearch");
+        input1.addEventListener("keypress", function(event){
+            if (event.key === "Enter"){
+                event.preventDefault();
+                searchTable(event);
+                
+            }
+        });
+        
+        
+          
+    </script>
+</body>
+

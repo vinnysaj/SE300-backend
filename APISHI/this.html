@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<div class = "content">
+    <table id = "thistable" class = 'tablecss1 hidden' onclick = "getliveadsb()">
+</div>
+<div id = "livedata">
+
+</div>
+</head>
+<body>
+<style>
+
+.tablecss1{
+    display: block;
+
+}
+.hidden{
+    display: none;
+}
+
+
+</style>
+<script>
+import React
+function showthatshit(){
+            tab = document.getElementById('thistable');
+            tab.classList.remove("hidden");
+            console.log('removed')
+        }
+        function removethatshit(){
+            tab = document.getElementById('thistable');
+            tab.classList.add("hidden");
+            console.log('added')
+        }
+        function getliveadsb(){
+            adb  = document.getElementById('livedata')
+        }
+</script>
+</body>
+</html>

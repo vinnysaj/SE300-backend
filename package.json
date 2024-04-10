@@ -10,10 +10,12 @@
   "author": "Christopher Allen",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^4.19.1",
     "express-session": "^1.17.3",
+    "expressjs": "^1.0.1",
     "nodemon": "^3.0.3",
     "passport": "^0.7.0",
-    "passport-google-oauth2": "^0.2.0"
+    "passport-google-oauth2": "^0.2.0",
+    "sequelize": "^6.37.1"
   }
 }

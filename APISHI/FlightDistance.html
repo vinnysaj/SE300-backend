@@ -1,0 +1,115 @@
+
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Finding distances based on Latitude and Longitude</title>
+	<meta name="keywords" content="haversine, formula, latitude, longitude, lat, lon, lng, distance, radius, earth, great circle, radians, coordinates, degrees, equator">
+	<script type="text/javascript">
+
+	
+	var Rm = 3961; // mean radius of the earth (miles) 
+	var Rk = 6373; // mean radius of the earth (km) 
+		
+	/* main function */
+	function findDistance(frm) {
+		var t1, n1, t2, n2, lat1, lon1, lat2, lon2, dlat, dlon, a, c, dm, dk, mi, km;
+		
+		// get values for lat1, lon1, lat2, and lon2
+		t1 = frm.lat1.value;
+		n1 = frm.lon1.value;
+		t2 = frm.lat2.value;
+		n2 = frm.lon2.value;
+		
+		// convert coordinates to radians
+		lat1 = deg2rad(t1);
+		lon1 = deg2rad(n1);
+		lat2 = deg2rad(t2);
+		lon2 = deg2rad(n2);
+		
+		// find the differences between the coordinates
+		dlat = lat2 - lat1;
+		dlon = lon2 - lon1;
+		
+		a  = Math.pow(Math.sin(dlat/2),2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon/2),2);
+		c  = 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); // great circle distance in radians
+		dm = c * Rm; // great circle distance in miles
+		dk = c * Rk; // great circle distance in km
+		
+		// round the results down to the nearest 1/1000
+		mi = round(dm);
+		km = round(dk);
+		
+		// display the result
+		frm.mi.value = mi;
+		frm.km.value = km;
+	}
+	
+	
+	// convert degrees to radians
+	function deg2rad(deg) {
+		rad = deg * Math.PI/180; // radians = degrees * pi/180
+		return rad;
+	}
+	
+	
+	// round to the nearest 1/1000
+	function round(x) {
+		return Math.round( x * 1000) / 1000;
+	}
+	
+	</script>
+</head>
+<body>
+
+<hr>
+
+<blockquote>
+	dlon = lon2 - lon1 <br>
+	dlat = lat2 - lat1 <br>
+	a = (sin(dlat/2))^2 + cos(lat1) * cos(lat2) * (sin(dlon/2))^2 <br>
+	c = 2 * atan2( sqrt(a), sqrt(1-a) ) <br>
+	d = R * c (where R is the radius of the Earth)
+</blockquote>
+
+<hr>
+
+<form onsubmit="findDistance(this);return false;">
+
+<p>
+	<strong>First location</strong> <span style="font-size:0.8em"><em>(default: 1600 Pennsylvania Ave NW, Washington, DC)</em></span><br>
+	Latitude: <input type="text" name="lat1" value="38.898556">
+	Longitude: <input type="text" name="lon1" value="-77.037852"><br>
+	<span style="font-size:0.8em"><em>Expressed in decimal degrees</em></span>
+</p>
+
+<p>
+	<strong>Second location</strong> <span style="font-size:0.8em"><em>(default: 1922 F St NW, Washington, DC)</em></span><br>
+	Latitude: <input type="text" name="lat2" value="38.897147">
+	Longitude: <input type="text" name="lon2" value="-77.043934"><br>
+	<span style="font-size:0.8em"><em>Expressed in decimal degrees</em></span>
+</p>
+
+<p>
+	<input type="submit" value="Calculate">
+	<input type="reset" value="Clear Form">
+</p>
+
+<hr>
+
+<p>
+	<strong>Results</strong><br>
+	<input type="text" size="10" name="mi"> miles<br>
+	<input type="text" size="10" name="km"> km
+</p>
+
+<script>
+document.getElementById('current_year').innerHTML = (new Date()).getFullYear();
+</script>
+
+<!-- google analytics -->
+<script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "//www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script>
+<script type="text/javascript">var pageTracker = _gat._getTracker("UA-254616-1");pageTracker._initData();pageTracker._trackPageview();</script>
+
+</body>
+</html>

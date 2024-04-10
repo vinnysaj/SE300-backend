@@ -6,6 +6,7 @@ const JSONbig = require('json-bigint');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const ocr = require('../PyOCR/requestOcrFunctions')
+// const adsb = require('APISHI/planeapi.json')
 
 
 function authenticateToken(req, res, next) {
@@ -290,7 +291,7 @@ function startExternalRoutes(app, passport) {
         }
     });
 
-    
+
 
 
     /* END FILE MANAGMENT */
@@ -318,6 +319,28 @@ function startExternalRoutes(app, passport) {
             res.sendStatus(400);
         }
     });
+
+    // app.get('/user/planeadsb', authenticateToken, async (req, res) =>{
+    //     try{
+    //         const allAircraft = await Planes.findAll();
+    //         res.json(allAircraft);
+    //     } catch (error){
+    //         console.error('No data brah:', error);
+    //         res.status(500).send('Server error');
+    //     }
+
+    // });
+
+    // app.post('/user/planeadsb', authenticateToken, async (req, res) => {
+    //     try {
+    //         const allAircraft = await Planes.findAll();
+    //         res.json(allAircraft);
+    //     } catch (error) {
+    //         console.error('No data brah:', error);
+    //         res.status(500).send('Server error');
+    //     }
+    // });
+
 
     /* END B64 POST */
 
