@@ -1,0 +1,91 @@
+doctype html
+html
+  head
+    title Boundless Internal Debug Menu
+    style.
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        margin: 0;
+        text-align: center;
+      }
+      .title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+      .form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px; /* Adjusted width for consistent padding */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      label {
+        display: block;
+        margin: 10px 0 5px; /* Adjusted for consistent spacing */
+        width: 100%;
+        text-align: left;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        background-color: #4a90e2; /* Blue */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%; /* Full width */
+      }
+      select, input[type="file"] {
+        width: calc(100% - 16px); /* Adjust width to account for padding */
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+      .checkbox-container {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        width: 100%;
+        margin: 10px 0;
+      }
+      input[type="checkbox"] {
+        margin-right: 5px; /* For spacing between checkbox and label */
+      }
+  body
+    h1.title Boundless Internal Debug File Upload
+    .form-container
+      h2 Internal File Upload
+      form(action="/file/create/upload" method="post" enctype="multipart/form-data")
+        div
+          label(for="file") Select file to upload:
+          input(type="file" name="file" id="file" required)
+        div
+          label(for="fileType") File Type:
+          select(name="fileType" id="fileType" required)
+            option(value="registration") Registration
+            option(value="maintenance") Maintenance
+            option(value="ownership") Ownership
+            option(value="other") Other
+        .checkbox-container
+          input(type="checkbox" name="handwritten" id="handwritten")
+          label(for="handwritten") Handwritten
+        div
+          label(for="selectedUser") Select User:
+          select(name="selectedUser" id="selectedUser" required)
+            each user in users
+              option(value=user)= user.name
+        button.button(type="submit") Upload
+        button.button(type="button" onclick="location.href='/debug/allFiles'") Back

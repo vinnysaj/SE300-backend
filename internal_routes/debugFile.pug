@@ -1,0 +1,100 @@
+doctype html
+html
+    head
+        title File Management Tool
+        style.
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f4f4f4;
+                padding: 20px;
+            }
+            .form-container {
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                max-width: 600px; /* Adjusted for potentially wider content */
+                margin: 0 auto;
+            }
+            .form-field {
+                margin-bottom: 15px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+            .form-field label {
+                display: block;
+                margin-bottom: 5px;
+                flex-basis: 100%;
+            }
+            .form-field input, .form-field textarea, .form-field select {
+                flex-grow: 1;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                box-sizing: border-box;
+            }
+             .form-buttons {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+            .form-buttons button, .form-buttons input[type="submit"] {
+                padding: 10px 15px;
+                font-size: 1em;
+                background-color: #4a90e2; /* Blue color */
+                color: white;
+                border: none;
+                cursor: pointer;
+                flex: 1; /* Flex grow */
+                margin: 0 5px; /* Spacing between buttons */
+                box-sizing: border-box;
+            }
+            .form-field input[type="checkbox"], .form-field button {
+                flex-grow: 0;
+                flex-shrink: 0;
+            }
+    body
+        .form-container
+            form(action="/file/update" method="post")
+                if file
+                    .form-field
+                        label(for="file_uid") File UID:
+                        input(type="text" id="file_uid" name="file_uid" value=file.file_uid)
+                    .form-field
+                        label(for="user_id_uploaded") User ID Uploaded:
+                        input(type="text" id="user_id_uploaded" name="user_id_uploaded" value=file.user_id_uploaded)
+                    .form-field
+                        label(for="timestamp") Timestamp:
+                        input(type="text" id="timestamp" name="timestamp" value=file.timestamp)
+                    .form-field
+                        label(for="type") Type:
+                        input(type="text" id="type" name="type" value=file.type)
+                    .form-field
+                        label(for="linked_aircraft_id") Linked Aircraft ID:
+                        input(type="number" id="linked_aircraft_id" name="linked_aircraft_id" value=file.linked_aircraft_id)
+                    .form-field
+                        label(for="hand_written") Hand Written:
+                        input(type="checkbox" id="hand_written" name="hand_written" checked=file.hand_written)
+                    .form-field
+                        label(for="title") Title:
+                        input(type="text" id="title" name="title" value=file.title)
+                    .form-field
+                        label(for="parsed_content") Parsed Content (JSON):
+                        textarea(id="parsed_content" name="parsed_content")= JSON.stringify(file.parsed_content ? file.parsed_content : {})
+                    .form-field
+                        label(for="full_location") Full Location:
+                        input(type="text" id="full_location" name="full_location" value=file.full_location)
+                    .form-field
+                        label(for="file_name") File Name:
+                        input(type="text" id="file_name" name="file_name" value=file.file_name)
+                    .form-field
+                        label(for="description") Description:
+                        textarea(id="description" name="description")= file.description ? file.description : ''
+                else
+                    p No file selected.
+                .form-buttons
+                    button(type="button" onclick="location.href=/debug/") Main Debug
+                    input(type="submit" value="Save Changes") 
+                    button(type="button" onclick="location.href='/debug/allFiles'") List All
+                    

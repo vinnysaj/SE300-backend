@@ -1,0 +1,104 @@
+html
+    head
+        title Boundless Flight Maintenance Login
+        style.
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #eeeeee;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .auth-container {
+                background-color: white;
+                padding: 40px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                width: 400px;
+            }
+            .auth-header {
+                font-size: 20px;
+                color: #333;
+                margin-bottom: 20px;
+                white-space: nowrap;
+            }
+            .auth-button {
+                display: block;
+                width: calc(100% - 30px);
+                padding: 10px 15px;
+                margin: 10px auto;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                text-decoration: none;
+                color: white;
+                background-color: #4a90e2;
+                text-align: center;
+            }
+            .auth-button.apple-btn {
+                background-color: #000;
+            }
+            .auth-button.mc-btn {
+                background-color: #283;
+            }
+            .auth-button.supercell-btn {
+                background-color: #e90;
+            }
+            .auth-button.lego-btn {
+                background-color: #DC3532;
+            }
+            .auth-button.hungryshark-btn {
+                background-color: #0A70DC;
+            }
+            .auth-button.mariokart-btn {
+                background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
+            }
+            .auth-button.zelda-btn {
+                background-color: #7D0609;
+                font-size: 14px;
+            }
+            .auth-button.wikileaks-btn {
+                background-color: #008080;
+                font-size: 14px;
+            }
+            .auth-button.tossturtle-btn {
+                background-color: #74B72E;
+                font-size: 14px;
+            }
+
+    body
+        .auth-container
+            .auth-header Sign in to Boundless Flight Maintenance
+            a(href="/auth/google" class="auth-button") Sign in with Google
+            a(href="/auth/apple" class="auth-button apple-btn") Sign in with Apple
+            a(href="/auth/minecraft" class="auth-button mc-btn")
+                img(src="https://cdn.discordapp.com/attachments/1196539389606633622/1221907319231873034/minecraft-creeper-icon-1-2600905690.png?ex=661448de&is=6601d3de&hm=c0deb95f11e7f91d75c7efa248f7e04458a1601136ffee8d4a25f711f2797079&", style="height: 16px; width: 16px; position: relative; top: 2px; right: 4px;")
+                | Sign in with Minecraft
+            a(href="https://www.supercell.com/en/games/clashofclans/" class="auth-button supercell-btn")
+                img(src="https://cdn.discordapp.com/attachments/1196539389606633622/1221919593719664822/app-icons-clashofclans-2204667588.png?ex=6614544d&is=6601df4d&hm=fa0da16ccb8fa94a87567649ab9f30c4cfe33ce4e380e29974a9b94a2ec76b35&", style="height: 16px; width: 16px; position: relative; top: 2px; right: 4px;")
+                | Sign in with Supercell
+            a(href="https://lego.com" class="auth-button lego-btn")
+                img(src="https://cdn.discordapp.com/attachments/1199816969919148033/1221921832702181517/lego-1-logo-png-transparent-2832893827.png?ex=66145663&is=6601e163&hm=6107a9cf54f6a533346fde9d1d03dfdcfd203b7176e78f017398c4956248bfa7&", style="height: 16px; width: 16px; position: relative; top: 2px; right: 4px;")
+                | Sign in with Lego
+            a(href="https://www.ubisoft.com/en-us/game/hungry-shark/world" class="auth-button hungryshark-btn")
+                img(src="https://cdn.discordapp.com/attachments/1199816969919148033/1221921823747346534/hungryshark.png?ex=66145660&is=6601e160&hm=5c911d021baf7cc635a6df8d2e1f203cf6aa98c77f296cae6d9c72c9674fd215&", style="height: 16px; width: 16px; position: relative; top: 2px; right: 4px;")
+                | Sign in with Hungry Shark World
+            a(href="https://mariokart8.nintendo.com" class="auth-button mariokart-btn")
+                img(src="https://cdn.discordapp.com/attachments/1199816969919148033/1221922397360357437/dcbm2d1-a4a10c6b-a83b-441c-ba4a-df9cf2c51284-2783772326.png?ex=661456e9&is=6601e1e9&hm=1183a17b43d8a44bd49b5a4b86f57180687deb7a684457e4a2738db4a47366ce&", style="height: 16px; width: 16px; position: relative; top: 2px; right: 4px;")
+                | Sign in with Mario Kart 8
+            a(href="https://zelda.nintendo.com/breath-of-the-wild/" class="auth-button zelda-btn")
+                img(src="https://cdn.discordapp.com/attachments/1199816969919148033/1221964804479123507/the_legend_of_zelda_breath_of_the_wild_icon_by_hatemtiger_dftplbl-fullview-1843619276.png?ex=66147e68&is=66020968&hm=7f893c129593a399c3726d5d6e41a451cb782b8569535e3f65d86fd397d27444&", style="height: 16px; width: 16px; position: relative; top: 2px; right: 4px;")
+                | Sign in with The Legend of Zelda: Breath of the Wild
+            a(href="https://wikileaks.org/" class="auth-button wikileaks-btn")
+                img(src="https://wikileaks.org/IMG/rubon33.png", style="height: 16px; width: 16px; position: relative; top: 2px; right: 4px;")
+                | Sign in with WikiLeaks
+            a(href="https://www.crazygames.com/game/toss-the-turtle" class="auth-button tossturtle-btn")
+                img(src="https://cdn.discordapp.com/attachments/1199816969919148033/1222650192172552252/Toss-0.png?ex=6616fcb9&is=660487b9&hm=df6133be6baf9bc6ac6a5f0798f7bb56c4bc4bc40dbe05129b57f76e7ff0a164&", style="height: 16px; width: 16px; position: relative; top: 2px; right: 4px;")
+                | Sign in with Toss The Turtle
+
+
+    

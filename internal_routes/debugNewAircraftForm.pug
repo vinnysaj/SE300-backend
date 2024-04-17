@@ -1,0 +1,101 @@
+html
+    head
+        title New Aircraft
+        style.
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                height: 100vh;
+                margin: 0;
+                text-align: center;
+            }
+            .title {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            .form-container {
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: 300px;
+            }
+            .form-field {
+                margin-bottom: 15px;
+            }
+            .form-field label {
+                display: block;
+                margin-bottom: 5px;
+            }
+            .form-field input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                box-sizing: border-box;
+            }
+            .form-buttons {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+            .form-buttons button, .form-buttons input[type="submit"] {
+                padding: 10px 15px;
+                font-size: 1em;
+                background-color: #4a90e2; /* Blue color */
+                color: white;
+                border: none;
+                cursor: pointer;
+                flex: 1; /* Flex grow */
+                margin: 0 5px; /* Spacing between buttons */
+                box-sizing: border-box;
+            }
+            .error-box {
+                background-color: #ff4d4d;
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                position: fixed;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                display: none;
+            }
+            .close-btn {
+                float: right;
+                cursor: pointer;
+            }
+        script.
+            window.onload = function() {
+                var urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('error')) {
+                    var errorBox = document.getElementById('error-box');
+                    var tailNumber = urlParams.get('error');
+                    errorBox.textContent = `${tailNumber} is an invalid or unknown tail number.`;
+                    var closeButton = document.createElement('span');
+                    closeButton.id = 'close-btn';
+                    closeButton.textContent = '×';
+                    closeButton.className = 'close-btn';
+                    closeButton.onclick = function() {
+                        errorBox.style.display = 'none';
+                    };
+                    errorBox.appendChild(closeButton);
+                    errorBox.style.display = 'block';
+                }
+            };
+    body
+        h1.title Initialize New Aircraft
+        .form-container
+            form(action="/debug/newAircraft" method="post")
+                .form-field
+                    label(for="tail_number") Aircraft Tail Number:
+                    input(type="text" id="tail_number" name="tail_number" required)
+                .form-buttons
+                    input(type="submit" value="Submit")
+                    button(type="button" onclick="location.href='/debug/aircraft'") Back
+        div#error-box.error-box

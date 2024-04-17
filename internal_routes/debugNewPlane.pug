@@ -1,0 +1,50 @@
+doctype html
+html
+    head
+        title New Aircraft
+        style.
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                text-align: center;
+            }
+            .form-container {
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: 300px;
+            }
+            .form-field {
+                margin-bottom: 15px;
+            }
+            .form-field label {
+                display: block;
+                margin-bottom: 5px;
+            }
+            .form-field input {
+                width: 100%;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                box-sizing: border-box;
+            }
+            .form-field input[type="submit"] {
+                background-color: #4a90e2;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+    body
+        .form-container
+            form(action="/debugNewAircraft" method="post")
+                .form-field
+                    label(for="tail_number") Aircraft Tail Number:
+                    input(type="text" id="tail_number" name="tail_number" required)
+                .form-field
+                    input(type="submit" value="Submit")
